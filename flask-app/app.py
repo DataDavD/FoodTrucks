@@ -9,6 +9,7 @@ es = Elasticsearch(host='es')
 
 app = Flask(__name__)
 
+
 def load_data_in_es():
     """ creates an index in elasticsearch """
     url = "http://data.sfgov.org/resource/rqzj-sfat.json"
@@ -18,6 +19,7 @@ def load_data_in_es():
     for id, truck in enumerate(data):
         res = es.index(index="sfdata", doc_type="truck", id=id, body=truck)
     print "Total trucks loaded: ", len(data)
+
 
 def safe_check_index(index, retry=3):
     """ connect to ES with retry """
@@ -32,9 +34,11 @@ def safe_check_index(index, retry=3):
         time.sleep(5)
         safe_check_index(index, retry-1)
 
+
 def format_fooditems(string):
     items = [x.strip().lower() for x in string.split(":")]
     return items[1:] if items[0].find("cold truck") > -1 else items
+
 
 def check_and_load_index():
     """ checks if index exits and loads the data accordingly """
@@ -49,6 +53,12 @@ def check_and_load_index():
 def index():
     return render_template('index.html')
 
+
+@app.route('/hello')
+def hello():
+    return "hello world!"
+
+
 @app.route('/debug')
 def test_es():
     resp = {}
@@ -60,6 +70,7 @@ def test_es():
         resp["status"] = "failure"
         resp["msg"] = "Unable to reach ES"
     return jsonify(resp)
+
 
 @app.route('/search')
 def search():
@@ -115,6 +126,7 @@ def search():
         "locations": locations,
         "status": "success"
     })
+
 
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("DEBUG", False)
