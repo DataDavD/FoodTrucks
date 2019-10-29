@@ -1,7 +1,7 @@
 version: "3"
 services:
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.1g
     container_name: es
     environment:
       - discovery.type=single-node
@@ -10,8 +10,10 @@ services:
     volumes:
       - esdata1:/usr/share/elasticsearch/data
   web:
-    image: datadavd/foodtrucks-web
+    build: . # datadavd/foodtrucks-web
     command: python app.py
+    environment:
+      - DEBUG=True # set an env var for flask
     depends_on:
       - es
     ports:
