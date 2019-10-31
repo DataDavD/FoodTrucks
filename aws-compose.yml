@@ -1,9 +1,9 @@
 es:
-  image: elasticsearch:2.3
+  image: elasticsearch
   cpu_shares: 100
   mem_limit: 262144000
 web:
-  image: prakhar1989/foodtrucks-web
+  image: datadavd/foodtrucks-web
   cpu_shares: 100
   mem_limit: 262144000
   ports:
